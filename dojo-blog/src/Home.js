@@ -1,21 +1,19 @@
 import { useState, useEffect } from 'react';
+
 import BlogList from './BlogList';
+import useFetch from './useFetch';
 
 const Home = () => {
-	const [blogs, setBlogs] = useState(null);
-
-	useEffect(() => {
-		fetch('http://localhost:8080/blogs')
-			.then((res) => {
-				return res.json();
-			})
-			.then((data) => {
-				setBlogs(data);
-			});
-	}, []);
+	const {
+		data: blogs,
+		isPending,
+		error,
+	} = useFetch('http://localhost:8080/blogs');
 
 	return (
 		<div className="home">
+			{error && <div>{error}</div>}
+			{isPending && <div>Loading...</div>}
 			{/* conditional output - JS evaluates what's on the left and if it's false then the right
             side is never evaluated. Therefore, it's not output since at load blogs is null which evaluates
             to false. */}
